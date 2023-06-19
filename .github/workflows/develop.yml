@@ -8,8 +8,6 @@ on:
     - 'src/**'
     - 'pom.xml'
 
-  workflow_dispatch:
-
 jobs:
   test-all:
     name: Build Java project, run all tests and push Docker image to DockerHub and GitHub Container Registry

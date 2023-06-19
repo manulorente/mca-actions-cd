@@ -4,8 +4,6 @@ on:
   schedule:
   - cron: '0 2 * * *'
   
-  workflow_dispatch:
-
 jobs:
   test-all:
     name: Build java project and run all tests

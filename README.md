@@ -46,15 +46,18 @@ Commit changes and finish feature branch:
 
 A pull-request will be created to merge the release branch into master. Once the pull-request is approved, the workflow will be triggered.
 
-[**Workflow 1 - Unit test and API rest test for features**]()
+[**Workflow 1 - Unit test and API rest test for features**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5316790062)
 
-[**Workflow 2 - All tests when commit into develop branch**]()
+[**Workflow 2 - All tests when commit into develop branch**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5316719315)
 
 Generating below artifacts:
-[*DockerHub artifact 1*]()
-[*DockerHub artifact 2*]()
-[*GitHub packages artifact 1*]()
-[*GitHub packages artifact 2*]()
+[*DockerHub artifact 1*](https://hub.docker.com/layers/manloralm/books-reviewer/dev/images/sha256-bef47a5d9f784973e57f9e8ac8ca6b10b6b91fb144b5bad62799e1ad344d8a52?context=repo)
+
+[*DockerHub artifact 2*](https://hub.docker.com/layers/manloralm/books-reviewer/0.1.0-dev/images/sha256-bef47a5d9f784973e57f9e8ac8ca6b10b6b91fb144b5bad62799e1ad344d8a52?context=repo)
+
+[*GitHub packages artifact 1*](https://github.com/users/manulorente/packages/container/books-reviewer/102887339?tag=0.1.0-dev)
+
+[*GitHub packages artifact 2*](https://github.com/users/manulorente/packages/container/books-reviewer/102887339?tag=dev)
 
 Init a new release branch:
 

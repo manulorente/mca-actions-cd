@@ -1,4 +1,4 @@
-name: Workflow 2 - All tests when commit into develop branch
+name: Workflow 2 - Run all tests when push develop branch
 
 on: 
   push:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   test-all:
-    name: Build Java project and run all tests
+    name: Build Java project, run all tests and push Docker image to DockerHub and GitHub Container Registry
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code on the runner
@@ -32,13 +32,13 @@ jobs:
         java-version: '17'
 
     - name: Run unitary test
-      run: mvn -B -Dtest="*UnitaryTest" test
+      run: mvn -B -Dtest=*UnitaryTest test
 
     - name: Run REST test
-      run: mvn -B -Dtest="*RestTest" test
+      run: mvn -B -Dtest=*RestTest test
       
     - name: Run e2e test
-      run: mvn -B -Dtest="*SeleniumTest" test
+      run: mvn -B -Dtest=*SeleniumTest test
 
     - name: Generate tag
       run: echo "tag=$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)" >> $GITHUB_OUTPUT

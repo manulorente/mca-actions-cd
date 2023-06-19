@@ -1,4 +1,4 @@
-name: Workflow 1 - Unit test and API rest test for features
+name: Workflow 1 - Run Unit test and API rest test when push on feature branch
 
 on: 
   push:

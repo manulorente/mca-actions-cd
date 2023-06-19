@@ -1,0 +1,43 @@
+name: Workflow 4 - All unit and rest tests when PR on develop & push on release
+
+on: 
+  pull_request:
+    branches: 
+    - develop
+    paths:
+    - 'src/**'
+    - 'pom.xml'
+
+  push:
+    branches: 
+    - 'release/**'
+    paths:
+    - 'src/**'
+    - 'pom.xml'
+
+jobs:
+  test-unitary-and-rest:
+    name: Test unitary and rest
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code on the runner
+      uses: actions/checkout@v3
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-maven-    
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Run unitary tests
+      run: mvn -B -Dtest=*UnitaryTest test
+
+    - name: Run rest tests
+      run: mvn -B -Dtest=*RestTest test

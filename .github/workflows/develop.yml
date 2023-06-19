@@ -1,0 +1,70 @@
+name: Workflow 2 - All tests when commit into develop branch
+
+on: 
+  pull_request:
+    branches: 
+    - develop
+    paths:
+    - 'src/**'
+    - 'pom.xml'
+
+  workflow_dispatch:
+
+jobs:
+  test-all:
+    name: Build Java project and run all tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code on the runner
+      uses: actions/checkout@v3
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-maven-    
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Run unitary test
+      run: mvn -B -Dtest="*UnitaryTest" test
+
+    - name: Run REST test
+      run: mvn -B -Dtest="*RestTest" test
+      
+    - name: Run e2e test
+      run: mvn -B -Dtest="*SeleniumTest" test
+
+    - name: Generate tag
+      run: echo "tag=$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)" >> $GITHUB_OUTPUT
+      id: project
+
+    - name: Generate Docker image
+      run: |
+          mvn spring-boot:build-image -DskipTests 
+            -Dspring-boot.build-image.imageName=books-reviewer
+    
+    - name: Login to DockerHub
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Push Docker image to DockerHub
+      run: | 
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.project.outputs.tag }}-dev
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:dev
+    
+    - name: Login to GitHub Packages
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    
+    - name: Push Docker image to GitHub Container Registry
+      run: |
+          IMAGE_VERSION=${{ steps.project.outputs.tag }}
+          IMAGE_USER=$(echo ${{ github.repository }} | awk '{print tolower($0)}')
+          docker tag books-reviewer ghcr.io/$IMAGE_USER/books-reviewer:$IMAGE_VERSION-dev
+          docker tag books-reviewer ghcr.io/$IMAGE_USER/books-reviewer:dev
+          docker push ghcr.io/$IMAGE_USER/books-reviewer:$IMAGE_VERSION-dev
+          docker push ghcr.io/$IMAGE_USER/books-reviewer:dev

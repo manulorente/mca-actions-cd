@@ -22,7 +22,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import es.urjc.code.daw.library.Application;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SeleniumTest {
 
     @LocalServerPort

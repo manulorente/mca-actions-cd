@@ -40,11 +40,11 @@ jobs:
 
     - name: Run e2e test to docker image
       run: |
-          docker run -d -p 8081:8080 --name books-reviewer
+          docker run -d -p 8081:8080 --name books-reviewer-nightly books-reviewer
           sleep 15
           mvn -B -Dtest=*SeleniumTest test -Dport=8081
-          docker stop books-reviewer
-          docker rm books-reviewer
+          docker stop books-reviewer-nightly
+          docker rm books-reviewer-nightly
 
     - name: Generate tag
       run: echo "tag=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_OUTPUT

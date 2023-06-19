@@ -15,6 +15,7 @@ public class BookService {
 
 	private BookRepository repository;
 	private NotificationService notificationService;
+	private LineBreaker lineBreaker = new LineBreaker();
 
 	public BookService(BookRepository repository, NotificationService notificationService){
 		this.repository = repository;
@@ -34,7 +35,7 @@ public class BookService {
 	}
 
 	public Book save(Book book) {
-		Book newBook = repository.save(book);
+		Book newBook = repository.save(breakLines(book));
 		notificationService.notify("Book Event: book with title="+newBook.getTitle()+" was created");
 		return newBook;
 	}
@@ -43,4 +44,11 @@ public class BookService {
 		repository.deleteById(id);
 		notificationService.notify("Book Event: book with id="+id+" was deleted");
 	}
+
+	public Book breakLines(Book book) {
+		book.setDescription(this.lineBreaker.breakLine(book.getDescription(), book.getDescription().length()));
+		notificationService.notify("Book Event: book with title="+book.getTitle()+" was updated");
+		return book;
+	}
+
 }

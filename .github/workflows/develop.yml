@@ -52,9 +52,10 @@ jobs:
 
     - name: Tag an push Docker image to DockerHub
       run: | 
-          docker tag books-reviewer ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.project.outputs.tag }}-dev
+          IMAGE_VERSION=${{ steps.project.outputs.tag }}
+          docker tag books-reviewer ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$IMAGE_VERSION-dev
           docker tag books-reviewer ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:dev
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.project.outputs.tag }}-dev
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$IMAGE_VERSION-dev
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:dev
     
     - name: Login to GitHub Packages

@@ -15,6 +15,8 @@ on:
     - 'src/**'
     - 'pom.xml'
 
+  workflow_dispatch:
+
 jobs:
   test-unitary-and-rest:
     name: Test unitary and rest
@@ -41,3 +43,31 @@ jobs:
 
     - name: Run rest tests
       run: mvn -B -Dtest=*RestTest test
+
+    - name: Generate tag
+      run: echo "tag=$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)" >> $GITHUB_OUTPUT
+      id: project
+
+    - name: Generate Docker image
+      run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=books-reviewer
+    
+    - name: Login to DockerHub
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Tag an push Docker image to DockerHub
+      run: | 
+          IMAGE_VERSION=${{ steps.project.outputs.tag }}
+          RELEASE_VERSION=$(git rev-parse --abbrev-ref HEAD)
+          docker tag books-reviewer ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$IMAGE_VERSION-RC$RELEASE_VERSION
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$IMAGE_VERSION-RC$RELEASE_VERSION
+    
+    - name: Login to GitHub Packages
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    
+    - name: Tag and push Docker image to GitHub Container Registry
+      run: |
+          IMAGE_VERSION=${{ steps.project.outputs.tag }}
+          IMAGE_USER=$(echo ${{ github.repository_owner }} | awk '{print tolower($0)}')
+          RELEASE_VERSION=$(git rev-parse --abbrev-ref HEAD)
+          docker tag books-reviewer ghcr.io/$IMAGE_USER/books-reviewer:$IMAGE_VERSION-RC$RELEASE_VERSION
+          docker push ghcr.io/$IMAGE_USER/books-reviewer:$IMAGE_VERSION-RC$RELEASE_VERSION

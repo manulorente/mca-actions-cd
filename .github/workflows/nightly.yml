@@ -34,7 +34,45 @@ jobs:
 
     - name: Run REST test
       run: mvn -B -Dtest=*RestTest test
+    
+    - name: Generate Docker image
+      run: mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=books-reviewer
+
+    - name: Run e2e test to docker image
+      run: |
+          docker run -d -p 8081:8080 --name books-reviewer
+          sleep 15
+          mvn -B -Dtest=*SeleniumTest test -Dport=8081
+          docker stop books-reviewer
+          docker rm books-reviewer
+
+    - name: Generate tag
+      run: echo "tag=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_OUTPUT
+      id: timestamp
+
+    - name: Login to DockerHub
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: Tag an push Docker image to DockerHub
+      run: | 
+          IMAGE_VERSION=${{ steps.timestamp.outputs.tag }}
+          docker tag books-reviewer ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$IMAGE_VERSION-nightly
+          docker tag books-reviewer ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:nightly
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$IMAGE_VERSION-nightly
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:nightly
+    
+    - name: Login to GitHub Packages
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  
+    - name: Tag and push Docker image to GitHub Container Registry
+      run: |
+          IMAGE_VERSION=${{ steps.timestamp.outputs.tag }}
+          IMAGE_USER=$(echo ${{ github.repository_owner }} | awk '{print tolower($0)}')
+          docker tag books-reviewer ghcr.io/$IMAGE_USER/books-reviewer:$IMAGE_VERSION-nightly
+          docker tag books-reviewer ghcr.io/$IMAGE_USER/books-reviewer:nightly
+          docker push ghcr.io/$IMAGE_USER/books-reviewer:$IMAGE_VERSION-nightly
+          docker push ghcr.io/$IMAGE_USER/books-reviewer:nightly    
+    
+
       
-    - name: Run e2e test
-      run: mvn -B -Dtest=*SeleniumTest test
             

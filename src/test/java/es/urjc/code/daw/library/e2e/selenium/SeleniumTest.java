@@ -22,11 +22,11 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import es.urjc.code.daw.library.Application;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = Application.class)
 public class SeleniumTest {
 
     @LocalServerPort
-    int port;
+    int port = Integer.parseInt(System.getProperty("port"));
 
     private WebDriver driver;
     private WebDriverWait wait;

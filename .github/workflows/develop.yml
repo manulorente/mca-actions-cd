@@ -1,7 +1,7 @@
 name: Workflow 2 - All tests when commit into develop branch
 
 on: 
-  pull_request:
+  push:
     branches: 
     - develop
     paths:

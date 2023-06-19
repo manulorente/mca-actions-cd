@@ -35,23 +35,21 @@ jobs:
       run: echo "tag=$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)" >> $GITHUB_OUTPUT
       id: project
 
+    - name: Login to DockerHub
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
     - name: Tag Docker image with the latest release
       run: |
           latest_release_branch=$(git for-each-ref --format='%(refname:short)' refs/heads/release/* | sort -V | tail -1)
           latest_release_version=$(echo $latest_release_branch | sed 's/release\///g')
           IMAGE_VERSION=${{ steps.project.outputs.tag }}
-          if [ "$latest_release_version" = "$IMAGE_VERSION" ]; then
-            echo "tag=latest" >> $GITHUB_OUTPUT
-          fi
-          docker tag books-reviewer ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$latest_release_version
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$latest_release_version ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:latest
 
     - name: Run e2e tests
       run: |
           docker run -d -p 8081:8080 --name books-reviewer ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:latest
           mvn -B -Dtest=*SeleniumTest test -Dport=8081
-    
-    - name: Login to DockerHub
-      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Push Docker image to DockerHub
       run:  docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:latest
@@ -61,5 +59,10 @@ jobs:
     
     - name: Tag and push Docker image to GitHub Container Registry
       run: |
-          docker tag books-reviewer ghcr.io/$IMAGE_USER/books-reviewer:latest
+          IMAGE_VERSION=${{ steps.project.outputs.tag }}
+          IMAGE_USER=$(echo ${{ github.repository_owner }} | awk '{print tolower($0)}')
+          latest_release_branch=$(git for-each-ref --format='%(refname:short)' refs/heads/release/* | sort -V | tail -1)
+          latest_release_version=$(echo $latest_release_branch | sed 's/release\///g')
+          docker pull ghcr.io/$IMAGE_USER/books-reviewer:$latest_release_version
+          docker tag ghcr.io/$IMAGE_USER/books-reviewer:$latest_release_version ghcr.io/$IMAGE_USER/books-reviewer:latest
           docker push ghcr.io/$IMAGE_USER/books-reviewer:latest

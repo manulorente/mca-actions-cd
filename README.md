@@ -33,6 +33,7 @@ Modify version in pom.xml file and add functionality:
 Commit changes and finish feature branch:
 
 ```sh
+    git add pom.xml
     git add src/test/java/es/urjc/code/daw/library/unitary/LineBreakerUnitaryTest.java 
     git add src/main/java/es/urjc/code/daw/library/book/LineBreaker.java
     git commit -m "Add line breaker tests"

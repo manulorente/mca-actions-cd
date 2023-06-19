@@ -49,6 +49,12 @@ A pull-request will be created to merge the release branch into master. Once the
 
 [**Workflow 2 - All tests when commit into develop branch**]()
 
+Generating below artifacts:
+[*DockerHub artifact 1*]()
+[*DockerHub artifact 2*]()
+[*GitHub packages artifact 1*]()
+[*GitHub packages artifact 2*]()
+
 Init a new release branch:
 
 ```sh
@@ -75,9 +81,17 @@ Below we can see the workflow triggered when the release branch is created:
 
 [**Workflow 4 - All unit and rest tests when PR on develop & push on release**]()
 
+Generating below artifacts:
+[*DockerHub artifact*]()
+[*GitHub packages artifact*]()
+
 Once the pull-request is approved, the workflow will be triggered:
 
 [**Workflow 5 - All unit tests and rest tests on commit into production**]()
+
+Generating below latest artifacts:
+[*DockerHub artifact*]()
+[*GitHub packages artifact*]()
 
 Merge release to develop:
 

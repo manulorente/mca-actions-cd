@@ -8,6 +8,8 @@ on:
     - 'src/**'
     - 'pom.xml'
 
+  workflow_dispatch:
+
 jobs:
   test-unitary-and-rest:
     name: Test unitary and rest

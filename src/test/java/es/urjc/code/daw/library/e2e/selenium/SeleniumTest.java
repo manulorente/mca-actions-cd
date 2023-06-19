@@ -26,7 +26,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class SeleniumTest {
 
     @LocalServerPort
-    int port = Integer.parseInt(System.getProperty("port"));
+    int port = Integer.parseInt(System.getProperty("port", "8080"));
 
     private WebDriver driver;
     private WebDriverWait wait;

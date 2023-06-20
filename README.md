@@ -83,7 +83,7 @@ Commit changes and finish release branch:
 
 Below we can see the workflow triggered when the release branch is created:
 
-[**Workflow 4 - All unit and rest tests when PR on develop & push on release**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5316934138/jobs/9626933987)
+[**Workflow 4 - All unit and rest tests when PR on develop & push on release**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5317114879)
 
 Generating below artifacts:
 [*DockerHub artifact*](https://hub.docker.com/layers/manloralm/books-reviewer/0.2.0-rc1/images/sha256-e5c7cb307f4dee4f1d0dd642944c32ce33cadbcc7ef1e4debb6d90072b46e87c?context=repo)
@@ -91,11 +91,11 @@ Generating below artifacts:
 
 Once the pull-request is approved, the workflow will be triggered:
 
-[**Workflow 5 - All unit tests and rest tests on commit into production**]()
+[**Workflow 5 - All unit tests and rest tests on commit into production**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5317115185)
 
 Generating below latest artifacts:
-[*DockerHub artifact*]()
-[*GitHub packages artifact*]()
+[*DockerHub artifact*](https://hub.docker.com/layers/manloralm/books-reviewer/latest/images/sha256-e5c7cb307f4dee4f1d0dd642944c32ce33cadbcc7ef1e4debb6d90072b46e87c?context=repo)
+[*GitHub packages artifact*](https://github.com/users/manulorente/packages/container/books-reviewer/102890800?tag=latest)
 
 Merge release to develop:
 

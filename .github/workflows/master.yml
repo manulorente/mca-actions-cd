@@ -38,11 +38,14 @@ jobs:
 
     - name: Tag Docker image with the latest release
       run: |
-          latest_release_branch=$(git for-each-ref --format='%(refname:short)' refs/heads/release/* | sort -V | tail -1)
-          latest_release_version=$(echo $latest_release_branch | sed 's/release\///g')
+          REPOSITORY=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer
           IMAGE_VERSION=${{ steps.project.outputs.tag }}
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$latest_release_version
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$latest_release_version ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:latest
+          RESPONSE=$(curl -s "https://hub.docker.com/v2/repositories/$REPOSITORY/tags")
+          TAGS=$(echo "$RESPONSE" | grep -o "\"name\":\"$IMAGE_VERSION-rc[0-9]*\"" | grep -o "$IMAGE_VERSION-rc[0-9]*")
+          SORTED_TAGS=$(echo "$TAGS" | sort -V)
+          LATEST_TAG=$(echo "$SORTED_TAGS" | tail -1)
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$LATEST_TAG
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$LATEST_TAG ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:latest
 
     - name: Run e2e tests
       run: |
@@ -59,8 +62,12 @@ jobs:
       run: |
           IMAGE_VERSION=${{ steps.project.outputs.tag }}
           IMAGE_USER=$(echo ${{ github.repository_owner }} | awk '{print tolower($0)}')
-          latest_release_branch=$(git for-each-ref --format='%(refname:short)' refs/heads/release/* | sort -V | tail -1)
-          latest_release_version=$(echo $latest_release_branch | sed 's/release\///g')
-          docker pull ghcr.io/$IMAGE_USER/books-reviewer:$latest_release_version
-          docker tag ghcr.io/$IMAGE_USER/books-reviewer:$latest_release_version ghcr.io/$IMAGE_USER/books-reviewer:latest
+          REPOSITORY=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer
+          IMAGE_VERSION=${{ steps.project.outputs.tag }}
+          RESPONSE=$(curl -s "https://hub.docker.com/v2/repositories/$REPOSITORY/tags")
+          TAGS=$(echo "$RESPONSE" | grep -o "\"name\":\"$IMAGE_VERSION-rc[0-9]*\"" | grep -o "$IMAGE_VERSION-rc[0-9]*")
+          SORTED_TAGS=$(echo "$TAGS" | sort -V)
+          LATEST_TAG=$(echo "$SORTED_TAGS" | tail -1)
+          docker pull ghcr.io/$IMAGE_USER/books-reviewer:$LATEST_TAG
+          docker tag ghcr.io/$IMAGE_USER/books-reviewer:$LATEST_TAG ghcr.io/$IMAGE_USER/books-reviewer:latest
           docker push ghcr.io/$IMAGE_USER/books-reviewer:latest

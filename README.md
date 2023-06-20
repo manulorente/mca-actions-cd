@@ -48,17 +48,17 @@ A pull-request will be created to merge the release branch into master. Once the
 
 [**Workflow 1 - Unit test and API rest test for features**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5316790062)  
 
-[**Workflow 2 - All tests when commit into develop branch**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5316719315)  
+[**Workflow 2 - All tests when commit into develop branch**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5317225235)  
 
 Generating below artifacts:  
 
-[*DockerHub artifact 1*](https://hub.docker.com/layers/manloralm/books-reviewer/dev/images/sha256-bef47a5d9f784973e57f9e8ac8ca6b10b6b91fb144b5bad62799e1ad344d8a52?context=repo)  
+[*DockerHub artifact 1*](https://hub.docker.com/layers/manloralm/books-reviewer/dev/images/sha256-fa259eb234a63d4e70251affea480b711d6f6cf246edb79310c1aef0b7b17a98?context=repo)  
 
-[*DockerHub artifact 2*](https://hub.docker.com/layers/manloralm/books-reviewer/0.1.0-dev/images/sha256-bef47a5d9f784973e57f9e8ac8ca6b10b6b91fb144b5bad62799e1ad344d8a52?context=repo)  
+[*DockerHub artifact 2*](https://hub.docker.com/layers/manloralm/books-reviewer/0.3.0-SNAPSHOT-dev/images/sha256-fa259eb234a63d4e70251affea480b711d6f6cf246edb79310c1aef0b7b17a98?context=repo)  
 
-[*GitHub packages artifact 1*](https://github.com/users/manulorente/packages/container/books-reviewer/102887339?tag=0.1.0-dev)  
+[*GitHub packages artifact 1*](https://github.com/users/manulorente/packages/container/books-reviewer/102896973?tag=dev)  
 
-[*GitHub packages artifact 2*](https://github.com/users/manulorente/packages/container/books-reviewer/102887339?tag=dev)  
+[*GitHub packages artifact 2*](https://github.com/users/manulorente/packages/container/books-reviewer/102896973?tag=0.3.0-SNAPSHOT-dev)  
 
 Init a new release branch:
 
@@ -88,9 +88,9 @@ Below we can see the workflow triggered when the release branch is created:
 
 Generating below artifacts:  
 
-[*DockerHub artifact*](https://hub.docker.com/layers/manloralm/books-reviewer/0.2.0-rc1/images/sha256-e5c7cb307f4dee4f1d0dd642944c32ce33cadbcc7ef1e4debb6d90072b46e87c?context=repo)  
+[*DockerHub artifact*](https://hub.docker.com/layers/manloralm/books-reviewer/0.2.0-rc1/images/sha256-c3541cf70a4a670c27ec9f3419138ee1baa57ad4ce8ef0c2ec575d3483c3e5d6?context=repo)  
 
-[*GitHub packages artifact*](https://github.com/users/manulorente/packages/container/books-reviewer/102890800?tag=0.2.0-rc1)
+[*GitHub packages artifact*](https://github.com/users/manulorente/packages/container/books-reviewer/102889728?tag=0.2.0-rc1)
 
 Once the pull-request is approved, the workflow will be triggered:
 
@@ -128,4 +128,14 @@ Commit changes and push to develop:
 
 ## Nightly build
 
-[**Workflow 3 - Nightly workflow**]()
+[**Workflow 3 - Nightly workflow**](https://github.com/manulorente/mca-4.2-manuel.lorentea-juanangel.garridol-2023-cd/actions/runs/5317825591)  
+
+Generating below artifacts:  
+
+[*DockerHub artifact 1*](https://hub.docker.com/layers/manloralm/books-reviewer/20230620.022043-nightly/images/sha256-fa259eb234a63d4e70251affea480b711d6f6cf246edb79310c1aef0b7b17a98?context=repo)  
+
+[*DockerHub artifact 2*](https://hub.docker.com/layers/manloralm/books-reviewer/nightly/images/sha256-fa259eb234a63d4e70251affea480b711d6f6cf246edb79310c1aef0b7b17a98?context=repo)  
+
+[*GitHub packages artifact 1*](https://github.com/users/manulorente/packages/container/books-reviewer/102896973?tag=20230620.022043-nightly)  
+
+[*GitHub packages artifact 2*](https://github.com/users/manulorente/packages/container/books-reviewer/102896973?tag=nightly)  
